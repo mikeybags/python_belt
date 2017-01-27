@@ -33,7 +33,10 @@
                 <td>{{ appointment.task }}</td>
                 <td>{{ appointment.time }}</td>
                 <td>{{ appointment.status }}</td>
-                <td><a href="{% url 'appointments:edit_appt' id=appointment.id %}">Edit</a><span>&nbsp;</span><span>&nbsp;</span><a href="{% url 'appointments:remove_appt' id=appointment.id %}">Remove</a></td>
+                <td>{% if appointment.status != "done" %}
+                      <a href="{% url 'appointments:edit_appt' id=appointment.id %}">Edit</a><span>&nbsp;</span><span>&nbsp;</span>
+                    {% endif %}
+                  <a href="{% url 'appointments:remove_appt' id=appointment.id %}">Remove</a></td>
               </tr>
             {% endfor %}
           {% endif %}
