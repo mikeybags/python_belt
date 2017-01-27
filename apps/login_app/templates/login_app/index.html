@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'login_app/bootstrap.min.css' %}">
+    <title>Login and Registration</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="well">
+        <h2>Please Register or Log In</h2>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <form class="form-horizontal" action='/register' method="POST">
+          {% csrf_token %}
+          <fieldset>
+            <div id="legend">
+              <legend class="">Register</legend>
+            </div>
+            <div class="control-group">
+              <label class="control-label"  for="first_name">First Name: </label>
+              <div class="controls">
+                <input type="text" name="first_name" value="{{ request.session.first_name }}" class="input-xlarge">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label"  for="last_name">Last Name: </label>
+              <div class="controls">
+                <input type="text" name="last_name" value="{{ request.session.last_name }}" class="input-xlarge">
+              </div>
+            </div>
+            <div class="control-group">
+              <!-- E-mail -->
+              <label class="control-label" for="email">E-mail:</label>
+              <div class="controls">
+                <input type="text" name="email" value="{{ request.session.email }}" class="input-xlarge">
+              </div>
+            </div>
+            <div class="control-group">
+              <!-- Password-->
+              <label class="control-label" for="password">Password:</label>
+              <div class="controls">
+                <input type="password" name="password" placeholder="" class="input-xlarge">
+              </div>
+            </div>
+            <div class="control-group">
+              <!-- Password -->
+              <label class="control-label"  for="confirm_pw">Confirm Password:</label>
+              <div class="controls">
+                <input type="password" name="confirm_pw" placeholder="" class="input-xlarge">
+              </div>
+              <p class="help-block"></p>
+            </div>
+            <div class="control-group">
+              <!-- Button -->
+              <div class="controls">
+                <button class="btn btn-success">Register</button>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        {% if messages %}
+          {% for msg in messages %}
+          <div class="alert-message block-message error">
+            <p class="text-danger">{{ msg }}</p>
+          </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div id="legend">
+          <legend class="">Login</legend>
+        </div>
+        <form class="form-horizontal" action="/login" method="post">
+          {% csrf_token %}
+          <fieldset>
+            <div class="control-group">
+              <label for="email" class="control-label">E-Mail:</label>
+              <div class="controls">
+                <input type="text" name="email" class="input-xlarge" value="{{ request.session.login_email }}">
+              </div>
+            </div>
+            <div class="control-group">
+              <label for="password" class="control-label">Password:</label>
+              <div class="controls">
+                <input type="password" name="password" class="input-xlarge">
+                <p class="help-block"></p>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <button class="btn btn-success">Login</button>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
