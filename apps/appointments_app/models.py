@@ -19,6 +19,10 @@ class AppointmentManager(models.Manager):
         if date == datetime.date.today().isoformat():
             if time < datetime.datetime.now().time().isoformat():
                 errors.append("Appointments cannot be for the past!")
+        appointments = Appointment.objects.filter(date = date)
+        for appt in appointments:
+            if time == appt.time:
+                errors.append
         return errors
 
 

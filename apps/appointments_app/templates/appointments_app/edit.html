@@ -29,9 +29,9 @@
           </div>
           <div class="control-group">
             <select name="status">
-              <option value="pending">Pending</option>
-              <option value="missed">Missed</option>
-              <option value="done">Done</option>
+              <option {% if appt.status == "pending" %} selected {% endif %} value="pending">Pending</option>
+              <option {% if appt.status == "missed" %} selected {% endif %} value="missed">Missed</option>
+              <option {% if appt.status == "done" %} selected {% endif %} value="done">Done</option>
             </select>
           </div>
           <div class="control-group">

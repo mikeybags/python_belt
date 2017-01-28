@@ -10,8 +10,8 @@ def index(request):
     user_id = request.session['id']
     today = datetime.date.today()
     today_iso = datetime.date.today().isoformat()
-    appointments_today = Appointment.objects.filter(user = user_id).filter(date = today_iso)
-    other_appointments = Appointment.objects.filter(user = user_id).exclude(date = today_iso)
+    appointments_today = Appointment.objects.filter(user = user_id).filter(date = today_iso).order_by('time')
+    other_appointments = Appointment.objects.filter(user = user_id).exclude(date = today_iso).order_by('date')
     context = {'today': today,
                'appointments_today': appointments_today,
                'other_appointments': other_appointments
