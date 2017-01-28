@@ -33,12 +33,9 @@ def add_appt(request):
             for error in errors:
                 messages.error(request, error)
                 return redirect('appointments:home')
-        appointments = Appointment.objects.filter(date = date)
-        for appt in appointments:
-            if time == appt.time:
-                error += "You cannot schedule two appointments at the same time!"
-                messages.error(request, error)
-                return redirect('appointments:home')
+        if Appointment.objects.filter(user__id = user_id).filter(date = date).filter(time = time):
+            messages.add_message(request, messages.ERROR, 'You can not schedule two appointments at the same time.')
+            return redirect('appointments:home')
         Appointment.objects.add_appointment(task, date, time, user_id)
         return redirect('appointments:home')
 
