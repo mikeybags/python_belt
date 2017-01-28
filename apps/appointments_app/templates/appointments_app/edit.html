@@ -21,28 +21,32 @@
       <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
         <form class="form-horizontal" action="{% url 'appointments:update_appt' id=appointment.id %}" method="POST">
           {% csrf_token %}
+          <fieldset>
           <div class="control-group">
-            <label for="review">Tasks</label>
+            <label class="control-label" for="review">Tasks</label>
             <div class="controls">
               <input type="text" name="task" class="input-xlarge" value ="{{ appointment.task }}">
             </div>
           </div>
           <div class="control-group">
             <select name="status">
-              <option {% if appt.status == "pending" %} selected {% endif %} value="pending">Pending</option>
-              <option {% if appt.status == "missed" %} selected {% endif %} value="missed">Missed</option>
-              <option {% if appt.status == "done" %} selected {% endif %} value="done">Done</option>
+              <option {% if appointment.status == "pending" %} selected {% endif %} value="pending">Pending</option>
+              <option {% if appointment.status == "missed" %} selected {% endif %} value="missed">Missed</option>
+              <option {% if appointment.status == "done" %} selected {% endif %} value="done">Done</option>
             </select>
           </div>
           <div class="control-group">
             <label class="control-label" for="Date">Date:</label>
               <input type="date" name="date" class="input-xlarge" value ="{{ appointment.date }}">
+              <h6>Current appointment date is {{ appointment.date }}</h6>
           </div>
           <div class="control-group">
             <label class="control-label" for="time">Time:</label>
             <input type="time" name="time" class="input-xlarge" value="{{ appointment.time }}">
+            <h6>Current appointment time is {{ appointment.time }}</h6>
           </div>
           <input type="submit" value="Update">
+          </fieldset>
         </form>
         {% if messages %}
           <ul class="messages">

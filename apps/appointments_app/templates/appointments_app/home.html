@@ -19,32 +19,38 @@
     </div><!-- end well -->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <h3>Here are your appointments for today, {{ today }}: </h3>
-      <table class="table table-striped">
-        <thead>
-          <th>Tasks</th>
-          <th>Time</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </thead>
-        <tbody>
-          {% if appointments_today %}
-            {% for appointment in appointments_today %}
-              <tr>
-                <td>{{ appointment.task }}</td>
-                <td>{{ appointment.time }}</td>
-                <td>{{ appointment.status }}</td>
-                <td>{% if appointment.status != "done" %}
-                      <a href="{% url 'appointments:edit_appt' id=appointment.id %}">Edit</a><span>&nbsp;</span><span>&nbsp;</span>
-                    {% endif %}
-                  <a href="{% url 'appointments:remove_appt' id=appointment.id %}">Remove</a></td>
-              </tr>
-            {% endfor %}
-          {% endif %}
-        </tbody>
-    </table>
+      {% if appointments_today %}
+        <table class="table table-striped">
+          <thead>
+            <th>Tasks</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </thead>
+          <tbody>
+              {% for appointment in appointments_today %}
+                <tr>
+                  <td>{{ appointment.task }}</td>
+                  <td>{{ appointment.time }}</td>
+                  <td>{{ appointment.status }}</td>
+                  <td>{% if appointment.status != "done" %}
+                        <a href="{% url 'appointments:edit_appt' id=appointment.id %}">Edit</a><span>&nbsp;</span><span>&nbsp;</span>
+                      {% endif %}
+                    <a href="{% url 'appointments:remove_appt' id=appointment.id %}">Remove</a></td>
+                </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+      {% if not appointments_today %}
+        <p>&nbsp;</p>
+        <div>
+          <h4 class="text-center text-danger">No Appointments Today.</h4>
+        </div>
+      {% endif %}
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <h3>Your other appointments:</h3>
+      <h3>Your future appointments:</h3>
       <table class="table table-striped">
         <thead>
           <th>Tasks</th>
