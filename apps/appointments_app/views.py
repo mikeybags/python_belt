@@ -10,18 +10,15 @@ def index(request):
     user_id = request.session['id']
     today = datetime.date.today()
     current_time = datetime.datetime.now().time()
-    print current_time
     today_iso = datetime.date.today().isoformat()
     appointments_today = Appointment.objects.filter(user = user_id).filter(date = today_iso).exclude(time__lt= current_time).order_by('time')
     for a in appointments_today:
-        print a.time
-    other_appointments = Appointment.objects.filter(user = user_id).exclude(date__lte= today_iso).order_by('date', 'time')
+        other_appointments = Appointment.objects.filter(user = user_id).exclude(date__lte= today_iso).order_by('date', 'time')
     context = {'today': today,
                'appointments_today': appointments_today,
                'other_appointments': other_appointments
                }
     return render(request, 'appointments_app/home.html', context)
-
 
 def add_appt(request):
     if request.method == 'POST':
@@ -38,8 +35,6 @@ def add_appt(request):
                 messages.error(request, error)
         else:
             Appointment.objects.add_appointment(task, date, time, user_id)
-        return redirect('appointments:home')
-
     return redirect('appointments:home')
 
 def edit_appt(request, id):
