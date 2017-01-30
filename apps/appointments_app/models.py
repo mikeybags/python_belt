@@ -10,7 +10,6 @@ class AppointmentManager(models.Manager):
         Appointment.objects.create(task = task, date = date, time = time, user = user)
         return True
 
-
     def validate_appt(self, user_id, date = None, time = None):
         errors = []
         print time, "is time"
