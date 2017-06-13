@@ -10,16 +10,17 @@ class AppointmentManager(models.Manager):
         Appointment.objects.create(task = task, date = date, time = time, user = user)
         return True
 
-    def validate_appt(self, user_id, date = None, time = None):
+    def validate_appt(self, user_id, date = None, time = None, id = None):
         errors = []
-        print time, "is time"
+        print time, "is time 1"
+        print date, "is date 2"
         if date < datetime.date.today().isoformat():
             errors.append("Appointments cannot be for the past!")
         if date == datetime.date.today().isoformat():
             if time < datetime.datetime.now().time().isoformat():
                 errors.append("Appointments cannot be for the past!")
-        if Appointment.objects.filter(user__id = user_id).filter(date = date).filter(time = time):
-            messages.add_message(request, messages.ERROR, 'You can not schedule two appointments at the same time.')
+        if Appointment.objects.filter(user__id = user_id).filter(date = date).filter(time = time).exclude(id = id):
+            errors.append('You can not schedule two appointments at the same time.')
         return errors
 
 class Appointment(models.Model):

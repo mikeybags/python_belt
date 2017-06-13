@@ -8,12 +8,12 @@ def index(request):
     if 'id' not in request.session:
         return redirect('login:index')
     user_id = request.session['id']
-    today = datetime.date.today()
+    today = datetime.datetime.now().date()
     current_time = datetime.datetime.now().time()
-    today_iso = datetime.date.today().isoformat()
-    appointments_today = Appointment.objects.filter(user = user_id).filter(date = today_iso).exclude(time__lt= current_time).order_by('time')
+    appointments_today = Appointment.objects.filter(user = user_id).filter(date = today).exclude(time__lt= current_time).order_by('time')
+    other_appointments = []
     for a in appointments_today:
-        other_appointments = Appointment.objects.filter(user = user_id).exclude(date__lte= today_iso).order_by('date', 'time')
+        other_appointments = Appointment.objects.filter(user = user_id).exclude(date__lte= today).order_by('date', 'time')
     context = {'today': today,
                'appointments_today': appointments_today,
                'other_appointments': other_appointments
@@ -23,9 +23,7 @@ def index(request):
 def add_appt(request):
     if request.method == 'POST':
         date = request.POST['date']
-        date = date.encode('ascii','ignore')
         time = request.POST['time']
-        time = time.encode('ascii','ignore')
         task = request.POST['task']
         user_id = request.session['id']
         errors = []
@@ -41,32 +39,33 @@ def edit_appt(request, id):
     if 'id' not in request.session:
         return redirect('login:index')
     appointment = Appointment.objects.get(id = id)
-    context = {'appointment': appointment}
+    appointment_time = str(appointment.time)
+    appointment_date = str(appointment.date)
+    context = {
+        'appointment': appointment,
+        'appointment_date': appointment_date,
+        'appointment_time': appointment_time
+        }
     return render(request, 'appointments_app/edit.html', context)
 
 def update_appt(request, id):
     if 'id' not in request.session:
         return redirect('login:index')
+    user_id = request.session['id']
     if request.method == 'POST':
         errors = []
-        if request.POST['date']:
-            date = request.POST['date']
-            date = date.encode('ascii','ignore')
-            errors += Appointment.objects.validate_appt(user_id, date)
-            Appointment.objects.filter(id = id).update(date = date)
-        if request.POST['time']:
-            time = request.POST['time']
-            time = time.encode('ascii','ignore')
-            errors += Appointment.objects.validate_appt(user_id, None, time)
-            Appointment.objects.filter(id = id).update(time = time)
         task = request.POST['task']
         status = request.POST['status']
         user_id = request.session['id']
+        time = request.POST['time']
+        date = request.POST['date']
+        errors += Appointment.objects.validate_appt(user_id, date, time, id)
         if errors:
             for error in errors:
                 messages.error(request, error)
+                return redirect('appointments:edit_appt', id = id)
         else:
-            Appointment.objects.filter(id = id).update(status = status, task= task)
+            Appointment.objects.filter(id = id).update(status = status, task= task, time = time, date = date)
     return redirect('appointments:home')
 
 def remove_appt(request, id):
